@@ -17,15 +17,40 @@ BinaryTree.prototype.noChildren = function() {
   return (this.leftChild === null && this.rightChild === null);
 };
 
+// PRE coding pseudo code...
 // if newval < tree.val, look left
 //    if nothing left, add left
 //    else go left, check again
 // else (look right)
 //    if nothing right, add right
 //    else go right, check again
-//
-// function (non-prototype) version
-//
+BinaryTree.prototype.insertValue = function(newValue) {
+  // handle an empty root node
+  if (this.value === null) {
+    this.value = newValue;
+  }
+  else {
+    // insert newValue into an existing/populated tree  
+    if (newValue < this.value) {
+      if (this.leftChild === null) {
+        this.leftChild = new BinaryTree(newValue);
+      }
+      else {
+        treeInsertValue(this.leftChild, newValue);
+      }
+    }
+    else {
+      if (this.rightChild === null) {
+        this.rightChild = new BinaryTree(newValue);
+      }
+      else {
+        treeInsertValue(this.rightChild, newValue);
+      }
+    }
+  }
+};
+
+// non-prototype function version (wrote this prior to prototype version)
 function treeInsertValue(tree, newValue) {
   // handle an empty root node
   if (tree.value === null) {
@@ -59,7 +84,7 @@ treeInsertValue(bt, 25);
 treeInsertValue(bt, 14);
 
 
-// my count leafs
+// my (self written) count leafs function
 var leafCount = 0;
 
 function countLeaves(tree) {
@@ -81,7 +106,7 @@ function countLeaves(tree) {
   return leafCount;
 }
 
-//  pseudo code from class
+// CLASS DISCUSSED SOLUTION (pseudo code)
 // countLeaves(node)
 //   if node is null
 //     return 0
@@ -89,32 +114,34 @@ function countLeaves(tree) {
 //     return 1
 //   return countLeaves(node left) + countLeaves(node right)
 // end
-// var root = { left: null, right: null };
+var root = { left: null, right: null };
 
-// function countLeaves(node) {
-//   if (node === null) {
-//     return 0;
-//   }
+function countLeaves2(node) {
+  if (node === null) {
+    return 0;
+  }
 
-//   if (node.left === null && node.right === null) {
-//     return 1;
-//   }
+  if (node.left === null && node.right === null) {
+    return 1;
+  }
 
-//   return countLeaves(node.left) + countLeaves(node.right);
-// }
+  return countLeaves2(node.left) + countLeaves2(node.right);
+}
+// cool solution in that no count var is needed.
+// cumulated count is maintained by stack.
 
-// // only the root
-// countLeaves(root);
+// only the root
+countLeaves2(root);
 
-// // give the root a left node
-// root.left = { left: null, right: null };
+// give the root a left node
+root.left = { left: null, right: null };
 
-// // count with the root having a left child
-// countLeaves(root);
+// count with the root having a left child
+countLeaves2(root);
 
-// // give the root a right node
-// root.right = { left: null, right: null };
+// give the root a right node
+root.right = { left: null, right: null };
 
-// // count with the root having a left and a right
-// countLeaves(root);
+// count with the root having a left and a right
+countLeaves2(root);
 
