@@ -1,3 +1,4 @@
+// Lab instructions.
 // insert new values into the binary tree
 // such that, values on the left are less than
 // the current value. values on the right are 
@@ -9,35 +10,50 @@ function BinaryTree(value) {
   this.rightChild = null;
 }
 
+// per lab, requested to write an isEmpty function
+// returning true if left and right children are null.
+// methinks better named...
+BinaryTree.prototype.noChildren = function() {
+  return (this.leftChild === null && this.rightChild === null);
+};
+
 // if newval < tree.val, look left
 //    if nothing left, add left
-//    else go further left
+//    else go left, check again
 // else (look right)
 //    if nothing right, add right
-//    else go further right
+//    else go right, check again
 //
-//  function (non-prototype) version
+// function (non-prototype) version
 //
 function treeInsertValue(tree, newValue) {
-  if (newValue < tree.value) {
-    if (tree.leftChild === null) {
-      tree.leftChild = new BinaryTree(newValue);
-    }
-    else {
-      treeInsertValue(tree.leftChild, newValue);
-    }
+  // handle an empty root node
+  if (tree.value === null) {
+    tree.value = newValue;
   }
   else {
-    if (tree.rightChild === null) {
-      tree.rightChild = new BinaryTree(newValue);
+    // insert newValue into an existing/populated tree  
+    if (newValue < tree.value) {
+      if (tree.leftChild === null) {
+        tree.leftChild = new BinaryTree(newValue);
+      }
+      else {
+        treeInsertValue(tree.leftChild, newValue);
+      }
     }
     else {
-      treeInsertValue(tree.rightChild, newValue);
+      if (tree.rightChild === null) {
+        tree.rightChild = new BinaryTree(newValue);
+      }
+      else {
+        treeInsertValue(tree.rightChild, newValue);
+      }
     }
   }
 }
 
-bt = new BinaryTree(17);
+bt = new BinaryTree();
+treeInsertValue(bt, 17);
 treeInsertValue(bt, 9);
 treeInsertValue(bt, 25);
 treeInsertValue(bt, 14);
@@ -47,18 +63,21 @@ treeInsertValue(bt, 14);
 var leafCount = 0;
 
 function countLeaves(tree) {
-//  if (tree.isEmpty()) {    
-  if (tree.leftChild === null && tree.rightChild === null) {    
-    leafCount ++;
+  // if the node is a leaf, increment leaf count
+  if (tree.noChildren()) {    
+    leafCount++;
   }
   else {
+    // count all leaves on the left
     if (tree.leftChild !== null) {
       countLeaves(tree.leftChild);
     }
+    // count all leaves on the right
     if (tree.rightChild !== null) {
       countLeaves(tree.rightChild);
     }
   }
+  // return incremented leaf count (recursively adds both sides)
   return leafCount;
 }
 
